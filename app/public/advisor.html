@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advisor Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>AI Interview Simulator</h1><nav><a href="/">Candidate</a><a class="active" href="/advisor.html">Advisor dashboard</a></nav></header>
+<main>
+  <section class="panel">
+    <div class="row">
+      <label>Cohort<select id="cohort"></select></label>
+      <label>Add candidate<input id="newName" placeholder="Full name"></label>
+      <button id="add">Add</button>
+    </div>
+  </section>
+  <div class="stats" id="stats"></div>
+  <section class="panel" style="margin-top:16px">
+    <h2 style="margin-top:0;font-size:17px">Cohort skill averages</h2>
+    <div class="rubric" id="rubric"></div>
+  </section>
+  <section class="panel">
+    <h2 style="margin-top:0;font-size:17px">Candidates, by who needs you first</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Candidate</th><th>Readiness</th><th>Latest score</th><th>Mock interviews</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+  <section class="panel" id="detail" hidden></section>
+</main>
+<script type="module" src="advisor.js"></script>
+</body>
+</html>

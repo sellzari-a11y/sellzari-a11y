@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock Interview</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>AI Interview Simulator</h1><nav><a class="active" href="/">Candidate</a><a href="/advisor.html">Advisor dashboard</a></nav></header>
+<main>
+  <section class="panel" id="setup">
+    <h2 style="margin-top:0">Start a mock interview</h2>
+    <p class="muted">Practice with an AI interviewer, then get a scorecard your career advisor can see.</p>
+    <div class="row">
+      <label>Cohort<select id="cohort"></select></label>
+      <label>Your name<select id="candidate"></select></label>
+      <label>Interview track<select id="track"></select></label>
+      <button id="start">Start interview</button>
+    </div>
+    <p class="muted" id="mode"></p>
+  </section>
+
+  <section class="panel" id="interview" hidden>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+      <strong id="trackName"></strong><span class="badge" id="progress"></span>
+    </div>
+    <div class="chat" id="chat"></div>
+    <form id="answerForm">
+      <textarea id="answer" placeholder="Type your answer the way you'd say it out loud…" required></textarea>
+      <div class="row" style="margin-top:10px;justify-content:space-between;align-items:center">
+        <span class="muted" id="status"></span><button id="send">Send answer</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel" id="scorecard" hidden></section>
+</main>
+<script type="module" src="candidate.js"></script>
+</body>
+</html>
