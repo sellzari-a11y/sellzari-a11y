@@ -52,7 +52,7 @@ export function ListingsExplorer() {
 
   return (
     <section aria-label="Property search" className="bg-white pb-24 md:pb-40">
-      <div className="sticky top-0 z-30 border-b border-navy/10 bg-white/90 backdrop-blur-md">
+      <div className="sticky top-20 z-30 border-b border-navy/10 bg-white/90 backdrop-blur-md transition-[top] duration-500 ease-expo [html[data-header=hidden]_&]:top-0">
         <div className="container-x flex flex-col gap-4 py-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div role="radiogroup" aria-label="Listing status" className="flex rounded-full bg-offwhite p-1">

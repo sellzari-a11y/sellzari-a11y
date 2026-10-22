@@ -8,19 +8,16 @@ import { cn } from "@/lib/utils";
 export function RevealImage({
   children,
   className,
-  direction = "up",
   delay = 0,
 }: {
   children: ReactNode;
   className?: string;
-  direction?: "up" | "left";
   delay?: number;
 }) {
-  const hidden = direction === "up" ? "inset(100% 0% 0% 0%)" : "inset(0% 100% 0% 0%)";
   return (
     <m.div
       className={cn("relative overflow-hidden", className)}
-      initial={{ clipPath: hidden }}
+      initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
       whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
       viewport={{ once: true, margin: "0px 0px -15% 0px" }}
       transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1], delay }}

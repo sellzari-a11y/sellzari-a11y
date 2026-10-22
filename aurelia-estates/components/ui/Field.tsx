@@ -8,23 +8,21 @@ export function Field({
   error,
   children,
   className,
-  dark = false,
 }: {
   id: string;
   label: string;
   error?: string;
   children: ReactNode;
   className?: string;
-  dark?: boolean;
 }) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <label htmlFor={id} className={cn("label", dark ? "text-white/70" : "text-navy/80")}>
+      <label htmlFor={id} className="label text-navy/80">
         {label}
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} role="alert" className={cn("text-sm", dark ? "text-sand" : "text-red-700")}>
+        <p id={`${id}-error`} role="alert" className="text-sm text-red-700">
           {error}
         </p>
       )}

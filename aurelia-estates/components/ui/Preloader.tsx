@@ -3,13 +3,15 @@
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useLoader } from "@/components/providers/LoaderProvider";
+import { PRELOADER_SEEN_KEY, SKIP_PRELOADER_CLASS } from "@/lib/preloader";
 import { site } from "@/lib/site";
 
 const DURATION = 1500;
 
 /**
  * Brand wordmark with a 0–100 counter. When the count completes, the panel
- * is wiped away with a clip-path to reveal the page underneath.
+ * is wiped away with a clip-path to reveal the page underneath. It plays once
+ * per browser session; later full-page loads skip straight to the page.
  *
  * The wordmark animates with CSS so it is visible (and the largest paint)
  * before hydration; the counter writes to the DOM directly to avoid 100
@@ -23,7 +25,8 @@ export function Preloader() {
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const seen = document.documentElement.classList.contains(SKIP_PRELOADER_CLASS);
+    if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setDone(true);
       setReady(true);
       return;
@@ -41,6 +44,11 @@ export function Preloader() {
       if (t < 1) raf = requestAnimationFrame(step);
       else
         timeout = window.setTimeout(() => {
+          try {
+            sessionStorage.setItem(PRELOADER_SEEN_KEY, "1");
+          } catch {
+            // Storage unavailable (private mode): the preloader simply plays again next load.
+          }
           // The hero starts animating in underneath as the wipe begins.
           setDone(true);
           setReady(true);

@@ -30,7 +30,7 @@ Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://aurelia-estates.com`) in production so
 ```
 app/
   layout.tsx              Root layout: Poppins via next/font, metadata, header/footer, preloader
-  template.tsx            Page transition (navy curtain + fade) on every route change
+  template.tsx            Incoming half of the page transition (curtain opens + fade)
   page.tsx                Home
   listings/page.tsx       Filterable listings
   listings/[slug]/        Property detail (static params, metadata, JSON-LD)
@@ -40,7 +40,8 @@ app/
   opengraph-image.tsx     Generated Open Graph image
 components/
   layout/                 Header (hide-on-scroll), MobileMenu, Footer, NewsletterForm, PageHeader
-  providers/              Lenis + GSAP smooth scroll, preloader state, MotionConfig
+  providers/              Lenis + GSAP smooth scroll, preloader state, MotionConfig,
+                          PageTransition (outgoing wipe on internal link clicks)
   ui/                     Button, Magnetic, Cursor, Preloader, RevealText, RevealImage,
                           Marquee, Counter, SmartImage, Field, MapPlaceholder, JsonLd
   home/                   Hero, SearchBar, FeaturedProperties (pinned horizontal scroll),
@@ -58,10 +59,12 @@ lib/
   schemas.ts              Zod schemas for every form
   gsap.ts                 Lazy GSAP/ScrollTrigger loader
   motion-features.ts      Framer Motion features, loaded async via <LazyMotion>
+  preloader.ts            Once-per-session preloader flag + inline <head> script
   images.ts mortgage.ts utils.ts
 hooks/
   useMediaQuery.ts        Media-query + fine-pointer detection
   useScrollTriggerEffect.ts  Scoped, lazily-loaded GSAP effects with cleanup
+  useFocusTrap.ts         Keeps Tab focus inside the mobile menu and lightbox
 ```
 
 ## Customising
@@ -111,8 +114,9 @@ The newsletter, contact and viewing-request forms validate with `react-hook-form
 
 ## Motion and accessibility notes
 
-- **Preloader** counts 0–100 then wipes away with a clip-path; the hero animates in underneath.
+- **Preloader** counts 0–100 then wipes away with a clip-path; the hero animates in underneath. It plays once per browser session, so later full-page loads go straight to the page.
+- **Page transitions:** clicking an internal link wipes a navy panel up over the current page, navigates, then the new page’s curtain lifts away. Modifier-clicks, same-page links and reduced-motion users navigate normally.
 - **Lenis** drives scrolling from GSAP’s ticker so ScrollTrigger stays in sync. GSAP and Lenis are dynamically imported after the preloader finishes, Framer Motion’s animation features load asynchronously through `LazyMotion`, and the custom cursor only loads on fine-pointer devices.
 - **Reduced motion:** when `prefers-reduced-motion` is set, Lenis, GSAP scroll effects, the preloader animation and the stat counters are skipped, Framer Motion drops transform animations (`MotionConfig reducedMotion="user"`), and CSS animations are neutralised.
-- Skip link, visible focus rings, labelled controls, ARIA on the carousel, menu, lightbox and filters, keyboard support for the slider (←/→) and lightbox (←/→/Esc).
+- Skip link, visible focus rings, labelled controls, ARIA on the carousel, menu, lightbox and filters, keyboard support for the slider (←/→) and lightbox (←/→/Esc), and focus trapped inside the mobile menu and lightbox while open (returning to where it was on close).
 - JSON-LD: `RealEstateAgent` site-wide and `RealEstateListing` on each property page.

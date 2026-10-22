@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClass } from "@/components/ui/Field";
 import { fakeSubmit, inquirySchema, type InquiryValues } from "@/lib/schemas";
+import { localDateISO } from "@/lib/utils";
 
 /** Book-a-viewing form shown alongside each listing. */
 export function InquiryForm({ propertyTitle }: { propertyTitle: string }) {
@@ -13,6 +15,9 @@ export function InquiryForm({ propertyTitle }: { propertyTitle: string }) {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<InquiryValues>({ resolver: zodResolver(inquirySchema), defaultValues: { phone: "" } });
+  // Set after mount: the page is prerendered, so a build-time date would go stale.
+  const [minDate, setMinDate] = useState<string>();
+  useEffect(() => setMinDate(localDateISO()), []);
 
   if (isSubmitSuccessful) {
     return (
@@ -71,6 +76,7 @@ export function InquiryForm({ propertyTitle }: { propertyTitle: string }) {
           <input
             id="inquiry-date"
             type="date"
+            min={minDate}
             className={inputClass}
             aria-invalid={!!errors.date}
             aria-describedby={describedBy("date")}

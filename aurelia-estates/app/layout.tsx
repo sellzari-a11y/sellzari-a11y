@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Providers } from "@/components/providers/Providers";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { Preloader } from "@/components/ui/Preloader";
+import { skipPreloaderScript } from "@/lib/preloader";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -54,7 +55,11 @@ const organizationLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    // suppressHydrationWarning: the inline script may add a class to <html> before React hydrates.
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: skipPreloaderScript }} />
+      </head>
       <body className="min-h-dvh overflow-x-clip">
         <noscript>
           <style>{`.preloader,.page-curtain{display:none!important}`}</style>
