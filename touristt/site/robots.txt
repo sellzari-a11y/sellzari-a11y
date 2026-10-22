@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /tracker.html
+Sitemap: https://touristt.example/sitemap.xml
