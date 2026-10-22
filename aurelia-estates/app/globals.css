@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* ---------- Brand tokens ---------- */
+:root {
+  --navy: #0b2545;
+  --royal: #1d4ed8;
+  --walnut: #6b4423;
+  --sand: #d9c3a5;
+  --white: #ffffff;
+  --offwhite: #f7f5f2;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-light: #13325c;
+  --color-royal: var(--royal);
+  --color-walnut: var(--walnut);
+  --color-sand: var(--sand);
+  --color-white: var(--white);
+  --color-offwhite: var(--offwhite);
+  --color-ink: var(--navy);
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  --text-display: clamp(3.5rem, 11vw, 13rem);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.05em;
+  --text-display--font-weight: 700;
+  --text-headline: clamp(2.25rem, 6vw, 6rem);
+  --text-headline--line-height: 0.95;
+  --text-headline--letter-spacing: -0.04em;
+  --text-headline--font-weight: 700;
+  --text-title: clamp(1.5rem, 3vw, 2.75rem);
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.03em;
+  --text-title--font-weight: 700;
+
+  --ease-expo: var(--ease-out-expo);
+
+  --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--white);
+    color: var(--navy);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--royal);
+    color: var(--white);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--royal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .bg-navy :focus-visible,
+  .bg-walnut :focus-visible {
+    outline-color: var(--sand);
+  }
+}
+
+/* ---------- Lenis ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ---------- Utilities ---------- */
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+  max-width: 120rem;
+}
+
+@utility label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-out-expo);
+  &:hover,
+  &:focus-visible,
+  :where(.group:hover, .group:has(:focus-visible)) & {
+    background-size: 100% 1px;
+    background-position: 0% 100%;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Subtle film grain over the whole page. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Preloader wordmark: CSS-driven so it animates before hydration. */
+.preloader-wordmark {
+  letter-spacing: -0.05em;
+  transform-origin: left bottom;
+  animation: wordmark-in 1.4s var(--ease-out-expo) both;
+}
+@keyframes wordmark-in {
+  from {
+    transform: translateY(0.3em) skewY(5deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Decorative oversized text rendered from a data attribute (kept out of the a11y tree). */
+.wordmark-ghost::before {
+  content: attr(data-text);
+}
+
+/* Hide the native cursor only when the custom cursor is active. */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Native range inputs styled to match the brand. */
+input[type="range"] {
+  accent-color: var(--royal);
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
