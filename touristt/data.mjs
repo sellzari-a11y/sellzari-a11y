@@ -7,7 +7,7 @@
 
 export const SITE = {
   name: { ar: "توريست", en: "Touristt" },
-  domain: "https://touristt.example", // PLACEHOLDER: final domain
+  domain: "https://sellzari-a11y.github.io/sellzari-a11y", // replace with Touristt's own domain when they have one
   whatsapp: "60100000000", // PLACEHOLDER: WhatsApp number, international format, digits only
   whatsappDisplay: "+60 10-000 0000", // PLACEHOLDER
   instagram: "https://www.instagram.com/touristt", // PLACEHOLDER: confirm handle

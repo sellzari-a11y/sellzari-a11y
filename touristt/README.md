@@ -35,7 +35,8 @@ Styles are in `assets/style.css` and behaviour in `assets/app.js`. The build cop
 These values in `data.mjs` are placeholders:
 
 - `SITE.whatsapp` / `whatsappDisplay`: Touristt's real WhatsApp number. Every button and the contact form use it.
-- `SITE.instagram`, `SITE.tiktok`, `SITE.tiktokHandle`, `SITE.email`, `SITE.domain`
+- `SITE.instagram`, `SITE.tiktok`, `SITE.tiktokHandle`, `SITE.email`
+- `SITE.domain`: currently the GitHub Pages address; change it when Touristt has its own domain.
 - `VIDEOS[].video`: paste real TikTok video IDs, and each card turns into the official TikTok embed.
 - `STORIES`: these are illustrative and labelled as examples on the page. Replace them with real students who have given consent.
 - `UNIVERSITIES`: confirm which ones are actual Touristt partners. The fee ranges are indicative planning figures; check them every intake.
@@ -44,4 +45,6 @@ These values in `data.mjs` are placeholders:
 
 ## Deploy on GitHub Pages
 
-Publish the `touristt/site` folder, either by pushing it to a `gh-pages` branch or with a Pages workflow that uploads `touristt/site` as the artifact.
+Live at https://sellzari-a11y.github.io/sellzari-a11y/
+
+`.github/workflows/deploy-touristt.yml` rebuilds the site and publishes it to the `gh-pages` branch on every push that touches `touristt/` (on `main` or `claude/confident-ptolemy-z5vst7`). You can also run it by hand from the repo's Actions tab. The PDF is not rebuilt in CI, so run `node build.mjs --pdf` locally and commit `assets/touristt-documents-checklist.pdf` after changing the checklist.
