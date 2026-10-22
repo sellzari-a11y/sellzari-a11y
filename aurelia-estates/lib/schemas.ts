@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { localDateISO } from "./utils";
 
 const email = z.email("Enter a valid email address");
 const name = z.string().trim().min(2, "Please enter your full name");
@@ -30,7 +31,9 @@ export const inquirySchema = z.object({
   date: z
     .string()
     .min(1, "Choose a preferred date")
-    .refine((value) => new Date(value) >= new Date(new Date().toDateString()), "Choose a date in the future"),
+    // Compare as YYYY-MM-DD strings: parsing with new Date() treats the value as UTC
+    // midnight, which rejects "today" for visitors west of UTC.
+    .refine((value) => value >= localDateISO(), "Choose today or a later date"),
   message: z.string().trim().max(600, "Keep it under 600 characters").optional(),
 });
 export type InquiryValues = z.infer<typeof inquirySchema>;

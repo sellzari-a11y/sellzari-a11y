@@ -4,7 +4,8 @@ import { m } from "framer-motion";
 
 /**
  * Re-mounts on every navigation: a navy curtain lifts away while the new page
- * fades in. Only opacity is animated on the content wrapper so pinned
+ * fades in. It starts closed so it picks up seamlessly from the outgoing wipe in
+ * components/providers/PageTransition.tsx. Only opacity is animated on the content wrapper so pinned
  * ScrollTrigger sections are not affected by an ancestor transform.
  */
 export default function Template({ children }: { children: React.ReactNode }) {

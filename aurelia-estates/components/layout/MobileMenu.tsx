@@ -3,8 +3,9 @@
 import { AnimatePresence, m } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { useLenis } from "@/components/providers/SmoothScroll";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -12,14 +13,18 @@ export function MobileMenu({
   open,
   onClose,
   isActive,
+  toggleRef,
 }: {
   open: boolean;
   onClose: () => void;
   isActive: (href: string) => boolean;
+  /** The header button that opens/closes the menu; kept in the focus loop. */
+  toggleRef: RefObject<HTMLButtonElement | null>;
 }) {
   const lenis = useLenis();
   const pathname = usePathname();
   const firstLink = useRef<HTMLAnchorElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
 
@@ -28,6 +33,8 @@ export function MobileMenu({
     onCloseRef.current();
   }, [pathname]);
 
+  useFocusTrap([dialog, toggleRef], open);
+
   useEffect(() => {
     if (!open) return;
     lenis?.stop();
@@ -35,17 +42,22 @@ export function MobileMenu({
     firstLink.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onCloseRef.current();
     window.addEventListener("keydown", onKey);
+    const menu = dialog.current;
+    const toggle = toggleRef.current;
     return () => {
       lenis?.start();
       document.documentElement.style.overflow = "";
       window.removeEventListener("keydown", onKey);
+      // Don't strand keyboard focus on a link that is about to unmount.
+      if (menu?.contains(document.activeElement)) toggle?.focus();
     };
-  }, [open, lenis]);
+  }, [open, lenis, toggleRef]);
 
   return (
     <AnimatePresence>
       {open && (
         <m.div
+          ref={dialog}
           id="mobile-menu"
           role="dialog"
           aria-modal="true"

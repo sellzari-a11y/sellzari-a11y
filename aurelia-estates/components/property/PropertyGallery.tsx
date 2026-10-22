@@ -4,6 +4,7 @@ import { AnimatePresence, m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLenis } from "@/components/providers/SmoothScroll";
 import { SmartImage } from "@/components/ui/SmartImage";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { PropertyImage } from "@/data/properties";
 import { cn } from "@/lib/utils";
 
@@ -12,9 +13,11 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
   const [open, setOpen] = useState<number | null>(null);
   const lenis = useLenis();
   const closeButton = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
   const lastTrigger = useRef<HTMLButtonElement | null>(null);
   const count = images.length;
   const isOpen = open !== null;
+  useFocusTrap([dialog], isOpen);
 
   const step = useCallback((dir: number) => setOpen((i) => (i === null ? i : (i + dir + count) % count)), [count]);
   const close = useCallback(() => {
@@ -78,6 +81,7 @@ export function PropertyGallery({ images, title }: { images: PropertyImage[]; ti
       <AnimatePresence>
         {open !== null && (
           <m.div
+            ref={dialog}
             role="dialog"
             aria-modal="true"
             aria-label={`${title} — image gallery`}

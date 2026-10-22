@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import type { ReactNode } from "react";
 import { useFinePointer } from "@/hooks/useMediaQuery";
 import { LoaderProvider } from "./LoaderProvider";
+import { PageTransition } from "./PageTransition";
 import { SmoothScroll } from "./SmoothScroll";
 
 const loadMotionFeatures = () => import("@/lib/motion-features").then((mod) => mod.default);
@@ -19,6 +20,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <MotionConfig reducedMotion="user" transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.9 }}>
         <LoaderProvider>
           <SmoothScroll>{children}</SmoothScroll>
+          <PageTransition />
           {finePointer && <Cursor />}
         </LoaderProvider>
       </MotionConfig>

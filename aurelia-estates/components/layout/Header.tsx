@@ -3,7 +3,7 @@
 import { m, useMotionValueEvent, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,12 @@ export function Header() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuToggle = useRef<HTMLButtonElement>(null);
+
+  // Lets other sticky UI (e.g. the listings filter bar) sit below the header while it is visible.
+  useEffect(() => {
+    document.documentElement.dataset.header = hidden ? "hidden" : "shown";
+  }, [hidden]);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
@@ -67,6 +73,7 @@ export function Header() {
           </div>
 
           <button
+            ref={menuToggle}
             type="button"
             className="relative z-[70] flex h-11 items-center gap-3 md:hidden"
             aria-expanded={menuOpen}
@@ -91,7 +98,7 @@ export function Header() {
           </button>
         </div>
       </m.header>
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} isActive={isActive} />
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} isActive={isActive} toggleRef={menuToggle} />
     </>
   );
 }
